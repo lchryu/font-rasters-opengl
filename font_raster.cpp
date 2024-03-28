@@ -1,0 +1,86 @@
+#include <GL/glut.h>
+#include <stdlib.h>
+
+//GLubyte rasters[24] = {
+//    0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00,
+//    0xff, 0x00, 0xff, 0x00, 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00,
+//    0xff, 0xc0, 0xff, 0xc0
+//};
+
+// H
+GLubyte rasters_H[32] = {
+    0x60, 0xc0, 0x91, 0x20, 0x91, 0x10, 0x51, 0x00,
+    0x32, 0x00, 0x12, 0x00, 0x0a, 0x00, 0x0e, 0x00,
+    0x0a, 0x00, 0x09, 0x00, 0x09, 0x80, 0x68, 0xe0, 
+    0x88, 0xa0, 0xfc, 0x90, 0x0a, 0x90, 0x06, 0x60,
+
+};
+
+ //Ô
+GLubyte rasters_O[32] = {
+    0x06, 0x00, 0x06, 0x00, 0x00, 0x00, 0x1f, 0x80, 
+    0x20, 0x40, 0x20, 0x40, 0x20, 0x40, 0x20, 0x40,
+    0x20, 0x40, 0x20, 0x40, 0x20, 0x40, 0x20, 0x40,
+    0x10, 0x80, 0x4f, 0x20, 0x20, 0x40, 0x1f, 0x80, 
+};
+// I
+GLubyte rasters_I[32] = {
+    0x00, 0xc0, 0x01, 0x20, 0x02, 0x10, 0x02, 0x00,
+    0x02, 0x00, 0x02, 0x00, 0x22, 0x00, 0x12, 0x00, 
+    0x1a, 0x00, 0x0a, 0x00, 0x06, 0x00, 0x06, 0x00,
+    0x06, 0x00, 0x00, 0x00, 0x06, 0x00, 0x06, 0x00,
+};
+
+void init(void)
+{
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+}
+
+void display(void)
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1.0, 1.0, 1.0);
+    int toado = 200;
+    glRasterPos2i(toado, toado); // định nghĩa lại gốc toạ độ
+
+    int khoang_cach = 16;
+    glBitmap(12, 16, 0.0, 0.0, khoang_cach, 0.0, rasters_H); // tương ứng với mảng raster định nghĩa ở bên trên
+    glBitmap(12, 16, 0.0, 0.0, khoang_cach, 0.0, rasters_O); // tương ứng với mảng raster định nghĩa ở bên trên
+    glBitmap(12, 16, 0.0, 0.0, khoang_cach, 0.0, rasters_I); // tương ứng với mảng raster định nghĩa ở bên trên
+
+    glFlush();
+}
+
+void reshape(int w, int h)
+{
+    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, w, 0, h, -1.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void keyboard(unsigned char key, int x, int y)
+{
+    switch (key) {
+    case 27:
+        exit(0);
+    }
+}
+
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(400, 400); // Kích thước cửa sổ được thay đổi thành 400x400
+    glutInitWindowPosition(100, 100);
+    glutCreateWindow(argv[0]);
+    glutCreateWindow("Design by HoiLuong");
+    init();
+    glutReshapeFunc(reshape);
+    glutKeyboardFunc(keyboard);
+    glutDisplayFunc(display);
+    glutMainLoop();
+    return 0;
+}
